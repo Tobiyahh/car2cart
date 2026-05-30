@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}Order History | Car2Cart{% endblock %}
+{% block content %}
+<section class="py-24">
+  <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+    <div class="space-y-6">
+      <div class="rounded-[2rem] border border-slate-800 bg-slate-900/90 p-8">
+        <h1 class="text-3xl font-bold text-white">Order History</h1>
+        <p class="mt-3 text-slate-400">Review orders and track your collectibles over time.</p>
+      </div>
+      {% for order in orders %}
+      <div class="glow-card rounded-3xl border border-slate-800 p-8">
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p class="text-sm uppercase tracking-[0.2em] text-orange-400">Order #{{ order.id }}</p>
+            <p class="mt-2 text-lg font-semibold text-white">{{ order.get_status_display }}</p>
+          </div>
+          <p class="text-sm text-slate-300">Placed on {{ order.placed_at|date:'M j, Y' }}</p>
+        </div>
+        <div class="mt-4 grid gap-3 text-slate-300 sm:grid-cols-3">
+          <p>Total: ${{ order.total_amount }}</p>
+          <p>Payment: {{ order.get_payment_method_display }}</p>
+          <p>Status: {{ order.get_payment_status_display }}</p>
+        </div>
+        {% if order.coupon_code %}
+        <p class="mt-3 text-sm text-orange-300">Coupon {{ order.coupon_code }} saved ${{ order.discount_amount }}</p>
+        {% endif %}
+        <div class="mt-5 space-y-2 border-t border-slate-800 pt-5">
+          {% for item in order.items.all %}
+          <div class="flex items-center justify-between gap-4 text-sm text-slate-300">
+            <span>{{ item.product.title|default:'Product unavailable' }} x {{ item.quantity }}</span>
+            <span>${{ item.total_price }}</span>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% empty %}
+      <div class="rounded-3xl border border-slate-800 bg-slate-900/90 p-10 text-center">
+        <p class="text-slate-300">No orders yet. Check out the latest collections and place your first order.</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

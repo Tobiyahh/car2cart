@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Car2Cart collectibles, premium cars, flash sales, and limited edition merch." />
+  <title>{% block title %}Car2Cart{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="{% static 'css/site.css' %}" />
+  {% block head %}{% endblock %}
+</head>
+<body class="bg-white text-gray-900 font-sans">
+  {% include 'includes/navbar.html' %}
+
+  <main class="min-h-screen">
+    {% if messages %}
+    <div class="mx-auto max-w-4xl px-4 pt-6 sm:px-6 lg:px-8">
+      <div class="space-y-3">
+        {% for message in messages %}
+        <div class="rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800 shadow-sm">
+          {{ message }}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </main>
+
+  {% include 'includes/footer.html' %}
+
+  {% block scripts %}{% endblock %}
+</body>
+</html>

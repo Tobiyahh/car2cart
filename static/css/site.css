@@ -1,0 +1,88 @@
+:root {
+  color-scheme: light;
+  font-family: 'Inter', sans-serif;
+  --background: #ffffff;
+  --foreground: #454545;
+  --card: #ffffff;
+  --card-foreground: #454545;
+  --primary: #f5a524;
+  --primary-foreground: #000000;
+  --primary-hover: #e69512;
+  --muted: #fbfbfb;
+  --muted-foreground: #747474;
+  --border: #e5e7eb;
+}
+
+body {
+  background: var(--background);
+}
+
+button, input, textarea, select {
+  font: inherit;
+}
+
+.bg-background {
+  background-color: var(--background);
+}
+
+.text-foreground {
+  color: var(--foreground);
+}
+
+.bg-card {
+  background-color: var(--card);
+}
+
+.text-card-foreground {
+  color: var(--card-foreground);
+}
+
+.bg-primary {
+  background-color: var(--primary);
+}
+
+.text-primary {
+  color: var(--primary);
+}
+
+.text-primary-foreground {
+  color: var(--primary-foreground);
+}
+
+.hover\:bg-primary-hover:hover {
+  background-color: var(--primary-hover);
+}
+
+.bg-muted {
+  background-color: var(--muted);
+}
+
+.text-muted-foreground {
+  color: var(--muted-foreground);
+}
+
+.border-border {
+  border-color: var(--border);
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f97316;
+  color: #111827;
+  border: 1px solid #fb923c;
+  box-shadow: 0 12px 28px -18px rgba(249, 115, 22, 0.9);
+  transition: background-color 150ms ease, border-color 150ms ease, transform 150ms ease;
+}
+
+.btn-primary:hover {
+  background-color: #fb923c;
+  border-color: #fdba74;
+  transform: translateY(-1px);
+}
+
+.btn-primary:focus-visible {
+  outline: 3px solid rgba(251, 146, 60, 0.45);
+  outline-offset: 3px;
+}

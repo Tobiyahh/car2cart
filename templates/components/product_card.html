@@ -1,0 +1,28 @@
+<article class="group overflow-hidden rounded-lg border border-gray-200 bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-orange-400 hover:shadow-lg">
+  <a href="{% url 'products:detail' slug=product.slug %}" class="block">
+    {% if product.images.first %}
+    <img src="{{ product.images.first.image.url }}" alt="{{ product.title }}" class="aspect-[4/3] w-full rounded-3xl object-cover" />
+    {% endif %}
+  </a>
+  <div class="mt-4">
+    <a href="{% url 'products:detail' slug=product.slug %}" class="block">
+      <h3 class="text-lg font-semibold text-gray-950">{{ product.title }}</h3>
+      <p class="mt-2 text-sm text-gray-600">{{ product.summary|truncatechars:90 }}</p>
+    </a>
+    <div class="mt-4 flex items-center justify-between text-sm text-orange-700">
+      <span>${{ product.price }}</span>
+      <span class="font-medium">{{ product.stock }} in stock</span>
+    </div>
+    <div class="mt-4 flex flex-wrap gap-3">
+      <a href="{% url 'products:detail' slug=product.slug %}" class="rounded-full border border-gray-300 px-4 py-2 text-sm text-gray-800 transition hover:border-orange-500">View details</a>
+      {% if product.stock > 0 %}
+      <form action="{% url 'cart:add' product.id %}" method="post">
+        {% csrf_token %}
+        <button class="rounded-full bg-orange-500 px-4 py-2 text-sm font-semibold text-gray-950">Add to cart</button>
+      </form>
+      {% else %}
+      <span class="rounded-full border border-gray-300 px-4 py-2 text-sm text-gray-500">Sold out</span>
+      {% endif %}
+    </div>
+  </div>
+</article>

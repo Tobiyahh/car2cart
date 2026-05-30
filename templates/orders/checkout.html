@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}Checkout | Car2Cart{% endblock %}
+{% block content %}
+<section class="py-24">
+  <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+    <div class="glow-card rounded-[2rem] border border-slate-800 p-10">
+      <h1 class="text-3xl font-bold text-white">Checkout</h1>
+      <p class="mt-3 text-slate-400">Complete your order with billing and shipping details.</p>
+      <form method="post" class="mt-8 space-y-6">
+        {% csrf_token %}
+        {% if cart and cart.items.exists %}
+        <div class="rounded-3xl border border-slate-800 bg-slate-950/80 p-6">
+          <h2 class="text-lg font-semibold text-white">Order Summary</h2>
+          <div class="mt-4 space-y-3">
+            {% for item in cart.items.all %}
+            <div class="flex items-center justify-between gap-4 text-sm">
+              <span class="text-slate-300">{{ item.product.title }} x {{ item.quantity }}</span>
+              <span class="font-medium text-orange-300">${{ item.total_price }}</span>
+            </div>
+            {% endfor %}
+          </div>
+          <div class="mt-4 flex items-center justify-between border-t border-slate-800 pt-4 text-white">
+            <span>Total</span>
+            <span class="text-xl font-bold">${{ cart.total_price }}</span>
+          </div>
+        </div>
+        {% endif %}
+        <div class="grid gap-6 sm:grid-cols-2">
+          <div>
+            <label class="mb-2 block text-sm font-medium text-slate-300">Shipping address</label>
+            <textarea name="shipping_address" rows="3" required class="w-full rounded-3xl border border-slate-700 bg-slate-950 px-4 py-3 text-slate-100 focus:ring-2 focus:ring-orange-500"></textarea>
+          </div>
+          <div>
+            <label class="mb-2 block text-sm font-medium text-slate-300">Billing address</label>
+            <textarea name="billing_address" rows="3" required class="w-full rounded-3xl border border-slate-700 bg-slate-950 px-4 py-3 text-slate-100 focus:ring-2 focus:ring-orange-500"></textarea>
+          </div>
+        </div>
+        <div>
+          <label class="mb-2 block text-sm font-medium text-slate-300">Payment method</label>
+          <select name="payment_method" class="w-full rounded-full border border-slate-700 bg-slate-950 px-4 py-3 text-slate-100 focus:ring-2 focus:ring-orange-500">
+            <option value="cod">Cash on delivery</option>
+            <option value="card">Card payment demo</option>
+            <option value="upi">UPI payment demo</option>
+          </select>
+        </div>
+        <div>
+          <label class="mb-2 block text-sm font-medium text-slate-300">Coupon code</label>
+          <input name="coupon_code" type="text" placeholder="Optional discount code" class="w-full rounded-full border border-slate-700 bg-slate-950 px-4 py-3 text-slate-100 focus:ring-2 focus:ring-orange-500">
+        </div>
+        <button type="submit" class="btn-primary w-full rounded-full px-6 py-3 text-sm font-semibold">Place order</button>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}

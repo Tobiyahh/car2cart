@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Order Confirmed | Car2Cart{% endblock %}
+{% block content %}
+<section class="py-24">
+  <div class="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8">
+    <div class="glow-card rounded-[2rem] border border-slate-800 p-12 text-center">
+      <h1 class="text-4xl font-bold text-white">Order Confirmed</h1>
+      <p class="mt-4 text-slate-300">Thanks for your order! Your Car2Cart collectibles are being prepared for shipment.</p>
+      {% if order %}
+      <div class="mt-6 rounded-3xl border border-slate-800 bg-slate-950/80 p-6 text-left">
+        <p class="text-sm text-slate-400">Order number</p>
+        <p class="mt-1 text-xl font-semibold text-white">#{{ order.id }}</p>
+        <p class="mt-4 text-sm text-slate-400">Payment</p>
+        <p class="mt-1 text-white">{{ order.get_payment_method_display }} - {{ order.get_payment_status_display }}</p>
+        {% if order.coupon_code %}
+        <p class="mt-4 text-sm text-slate-400">Discount</p>
+        <p class="mt-1 text-white">{{ order.coupon_code }} saved ${{ order.discount_amount }}</p>
+        {% endif %}
+        <p class="mt-4 text-sm text-slate-400">Total</p>
+        <p class="mt-1 text-xl font-semibold text-orange-300">${{ order.total_amount }}</p>
+      </div>
+      {% endif %}
+      <div class="mt-8 flex flex-wrap justify-center gap-3">
+        <a href="{% url 'orders:history' %}" class="btn-primary inline-flex rounded-full px-6 py-3 text-sm font-semibold text-slate-950">View Orders</a>
+        <a href="{% url 'products:list' %}" class="rounded-full border border-slate-700 px-6 py-3 text-sm text-slate-200 hover:border-orange-500/40">Keep Shopping</a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
