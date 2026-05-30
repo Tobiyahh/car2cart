@@ -10,11 +10,19 @@
       <p class="mt-2 text-sm text-gray-600">{{ product.summary|truncatechars:90 }}</p>
     </a>
     <div class="mt-4 flex items-center justify-between text-sm text-orange-700">
-      <span>${{ product.price }}</span>
+      <span>₹{{ product.price }}</span>
       <span class="font-medium">{{ product.stock }} in stock</span>
     </div>
     <div class="mt-4 flex flex-wrap gap-3">
       <a href="{% url 'products:detail' slug=product.slug %}" class="rounded-full border border-gray-300 px-4 py-2 text-sm text-gray-800 transition hover:border-orange-500">View details</a>
+      {% if user.is_authenticated %}
+      <form action="{% url 'accounts:wishlist_toggle' product.id %}" method="post">
+        {% csrf_token %}
+        <button class="rounded-full border border-gray-300 px-4 py-2 text-sm text-gray-800 transition hover:border-orange-500">
+          {% if product.id in wishlist_ids %}Saved{% else %}Wishlist{% endif %}
+        </button>
+      </form>
+      {% endif %}
       {% if product.stock > 0 %}
       <form action="{% url 'cart:add' product.id %}" method="post">
         {% csrf_token %}

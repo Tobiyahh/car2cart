@@ -18,18 +18,18 @@
           <p class="text-sm text-slate-300">Placed on {{ order.placed_at|date:'M j, Y' }}</p>
         </div>
         <div class="mt-4 grid gap-3 text-slate-300 sm:grid-cols-3">
-          <p>Total: ${{ order.total_amount }}</p>
+          <p>Total: ₹{{ order.total_amount }}</p>
           <p>Payment: {{ order.get_payment_method_display }}</p>
           <p>Status: {{ order.get_payment_status_display }}</p>
         </div>
         {% if order.coupon_code %}
-        <p class="mt-3 text-sm text-orange-300">Coupon {{ order.coupon_code }} saved ${{ order.discount_amount }}</p>
+        <p class="mt-3 text-sm text-orange-300">Coupon {{ order.coupon_code }} saved ₹{{ order.discount_amount }}</p>
         {% endif %}
         <div class="mt-5 space-y-2 border-t border-slate-800 pt-5">
           {% for item in order.items.all %}
           <div class="flex items-center justify-between gap-4 text-sm text-slate-300">
             <span>{{ item.product.title|default:'Product unavailable' }} x {{ item.quantity }}</span>
-            <span>${{ item.total_price }}</span>
+            <span>₹{{ item.total_price }}</span>
           </div>
           {% endfor %}
         </div>

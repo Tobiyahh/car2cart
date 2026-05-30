@@ -41,7 +41,7 @@
           {% for order in recent_orders %}
           <div class="flex flex-col gap-2 rounded-2xl bg-slate-950/70 p-4 sm:flex-row sm:items-center sm:justify-between">
             <span class="text-slate-300">#{{ order.id }} by {{ order.user.username }}</span>
-            <span class="font-semibold text-orange-300">${{ order.total_amount }}</span>
+            <span class="font-semibold text-orange-300">₹{{ order.total_amount }}</span>
           </div>
           {% empty %}
           <p class="text-slate-400">No orders yet.</p>

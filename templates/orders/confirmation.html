@@ -14,10 +14,10 @@
         <p class="mt-1 text-white">{{ order.get_payment_method_display }} - {{ order.get_payment_status_display }}</p>
         {% if order.coupon_code %}
         <p class="mt-4 text-sm text-slate-400">Discount</p>
-        <p class="mt-1 text-white">{{ order.coupon_code }} saved ${{ order.discount_amount }}</p>
+        <p class="mt-1 text-white">{{ order.coupon_code }} saved ₹{{ order.discount_amount }}</p>
         {% endif %}
         <p class="mt-4 text-sm text-slate-400">Total</p>
-        <p class="mt-1 text-xl font-semibold text-orange-300">${{ order.total_amount }}</p>
+        <p class="mt-1 text-xl font-semibold text-orange-300">₹{{ order.total_amount }}</p>
       </div>
       {% endif %}
       <div class="mt-8 flex flex-wrap justify-center gap-3">

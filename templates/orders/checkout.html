@@ -15,13 +15,13 @@
             {% for item in cart.items.all %}
             <div class="flex items-center justify-between gap-4 text-sm">
               <span class="text-slate-300">{{ item.product.title }} x {{ item.quantity }}</span>
-              <span class="font-medium text-orange-300">${{ item.total_price }}</span>
+              <span class="font-medium text-orange-300">₹{{ item.total_price }}</span>
             </div>
             {% endfor %}
           </div>
           <div class="mt-4 flex items-center justify-between border-t border-slate-800 pt-4 text-white">
             <span>Total</span>
-            <span class="text-xl font-bold">${{ cart.total_price }}</span>
+            <span class="text-xl font-bold">₹{{ cart.total_price }}</span>
           </div>
         </div>
         {% endif %}

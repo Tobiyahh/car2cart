@@ -1,13 +1,17 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, LogoutView
-from django.shortcuts import redirect, render
+from django.contrib import messages
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import View
+from django.views.decorators.http import require_POST
 from django.views.generic import TemplateView, CreateView
 
 from cart.views import merge_guest_cart_to_user
 from .forms import CustomSignupForm, LoginForm, ProfileForm
+from .models import UserProfile
+from products.models import Product
 
 
 class RegisterView(CreateView):
@@ -34,18 +38,43 @@ class CustomLogoutView(LogoutView):
 class ProfileView(TemplateView):
     template_name = 'accounts/profile.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        profile, _ = UserProfile.objects.get_or_create(user=self.request.user)
+        orders = self.request.user.orders.prefetch_related('items__product').order_by('-placed_at')
+        context['profile'] = profile
+        context['recent_orders'] = orders[:4]
+        context['order_count'] = orders.count()
+        context['wishlist'] = profile.wishlist.filter(is_active=True).prefetch_related('images')[:6]
+        context['wishlist_count'] = profile.wishlist.count()
+        return context
+
 
 @method_decorator(login_required, name='dispatch')
 class UpdateProfileView(View):
     template_name = 'accounts/profile_update.html'
 
     def get(self, request):
-        form = ProfileForm(instance=request.user)
+        form = ProfileForm(user=request.user)
         return render(request, self.template_name, {'form': form})
 
     def post(self, request):
-        form = ProfileForm(request.POST, instance=request.user)
+        form = ProfileForm(request.POST, user=request.user)
         if form.is_valid():
             form.save()
             return redirect('accounts:profile')
         return render(request, self.template_name, {'form': form})
+
+
+@login_required
+@require_POST
+def toggle_wishlist(request, product_id):
+    product = get_object_or_404(Product, id=product_id, is_active=True)
+    profile, _ = UserProfile.objects.get_or_create(user=request.user)
+    if profile.wishlist.filter(id=product.id).exists():
+        profile.wishlist.remove(product)
+        messages.success(request, f'{product.title} removed from your wishlist.')
+    else:
+        profile.wishlist.add(product)
+        messages.success(request, f'{product.title} added to your wishlist.')
+    return redirect(request.META.get('HTTP_REFERER', 'accounts:profile'))
