@@ -3,11 +3,12 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
 
 from products.models import Product
+from accounts.utils import is_shop_customer
 from .models import Cart, CartItem
 
 
 def get_or_create_cart(request):
-    if request.user.is_authenticated:
+    if is_shop_customer(request.user):
         cart, _ = Cart.objects.get_or_create(user=request.user)
         return cart
 

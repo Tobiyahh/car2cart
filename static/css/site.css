@@ -65,6 +65,14 @@ button, input, textarea, select {
   border-color: var(--border);
 }
 
+.glow-card {
+  background:
+    radial-gradient(circle at top left, rgba(249, 115, 22, 0.16), transparent 34%),
+    #111827;
+  color: #f8fafc;
+  box-shadow: 0 28px 80px -54px rgba(15, 23, 42, 0.85);
+}
+
 .btn-primary {
   display: inline-flex;
   align-items: center;

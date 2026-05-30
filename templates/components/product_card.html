@@ -15,7 +15,7 @@
     </div>
     <div class="mt-4 flex flex-wrap gap-3">
       <a href="{% url 'products:detail' slug=product.slug %}" class="rounded-full border border-gray-300 px-4 py-2 text-sm text-gray-800 transition hover:border-orange-500">View details</a>
-      {% if user.is_authenticated %}
+      {% if user.is_authenticated and not user.is_staff %}
       <form action="{% url 'accounts:wishlist_toggle' product.id %}" method="post">
         {% csrf_token %}
         <button class="rounded-full border border-gray-300 px-4 py-2 text-sm text-gray-800 transition hover:border-orange-500">

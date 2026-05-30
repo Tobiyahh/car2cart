@@ -6,11 +6,13 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.http import require_POST
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import TemplateView, CreateView
 
 from cart.views import merge_guest_cart_to_user
 from .forms import CustomSignupForm, LoginForm, ProfileForm
 from .models import UserProfile
+from .utils import is_shop_customer
 from products.models import Product
 
 
@@ -26,7 +28,8 @@ class CustomLoginView(LoginView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
-        merge_guest_cart_to_user(self.request, self.request.user)
+        if is_shop_customer(self.request.user):
+            merge_guest_cart_to_user(self.request, self.request.user)
         return response
 
 
@@ -34,8 +37,17 @@ class CustomLogoutView(LogoutView):
     next_page = reverse_lazy('core:home')
 
 
-@method_decorator(login_required, name='dispatch')
-class ProfileView(TemplateView):
+class CustomerRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
+    def test_func(self):
+        return is_shop_customer(self.request.user)
+
+    def handle_no_permission(self):
+        if self.request.user.is_authenticated:
+            return redirect('core:home')
+        return super().handle_no_permission()
+
+
+class ProfileView(CustomerRequiredMixin, TemplateView):
     template_name = 'accounts/profile.html'
 
     def get_context_data(self, **kwargs):
@@ -50,8 +62,7 @@ class ProfileView(TemplateView):
         return context
 
 
-@method_decorator(login_required, name='dispatch')
-class UpdateProfileView(View):
+class UpdateProfileView(CustomerRequiredMixin, View):
     template_name = 'accounts/profile_update.html'
 
     def get(self, request):
@@ -69,6 +80,9 @@ class UpdateProfileView(View):
 @login_required
 @require_POST
 def toggle_wishlist(request, product_id):
+    if not is_shop_customer(request.user):
+        return redirect('core:home')
+
     product = get_object_or_404(Product, id=product_id, is_active=True)
     profile, _ = UserProfile.objects.get_or_create(user=request.user)
     if profile.wishlist.filter(id=product.id).exists():

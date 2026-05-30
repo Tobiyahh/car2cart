@@ -2,6 +2,7 @@ from django.db.models import Q
 from django.views.generic import DetailView, ListView
 
 from accounts.models import UserProfile
+from accounts.utils import is_shop_customer
 from .models import Category, Product
 
 
@@ -26,7 +27,7 @@ class ProductListView(ListView):
         context = super().get_context_data(**kwargs)
         context['categories'] = Category.objects.all()
         context['selected_category'] = self.request.GET.get('category', '')
-        if self.request.user.is_authenticated:
+        if is_shop_customer(self.request.user):
             profile, _ = UserProfile.objects.get_or_create(user=self.request.user)
             context['wishlist_ids'] = set(profile.wishlist.values_list('id', flat=True))
         else:
@@ -41,7 +42,7 @@ class ProductDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['in_wishlist'] = False
-        if self.request.user.is_authenticated:
+        if is_shop_customer(self.request.user):
             profile, _ = UserProfile.objects.get_or_create(user=self.request.user)
             context['in_wishlist'] = profile.wishlist.filter(id=self.object.id).exists()
         return context
