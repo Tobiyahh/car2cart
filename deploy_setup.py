@@ -19,7 +19,13 @@ def create_superuser():
         User.objects.create_superuser(username=username, email=email, password=password)
         print("Superuser created successfully!")
     else:
-        print(f"Superuser '{username}' already exists. Skipping creation.")
+        print(f"Superuser '{username}' already exists. Updating password.")
+        user = User.objects.get(username=username)
+        user.set_password(password)
+        user.is_staff = True
+        user.is_superuser = True
+        user.save()
+        print("Superuser password updated successfully!")
 
 if __name__ == '__main__':
     create_superuser()
