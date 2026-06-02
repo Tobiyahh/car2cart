@@ -2,6 +2,12 @@ from .base import *
 
 DEBUG = False
 
+# Allowed hosts for production
+ALLOWED_HOSTS = ['car2cart.onrender.com', 'localhost', '127.0.0.1']
+
+# CSRF trusted origins for production
+CSRF_TRUSTED_ORIGINS = ['https://car2cart.onrender.com']
+
 # In production, set the database connection via environment variables.
 DATABASES['default'] = env.db('DATABASE_URL', default='sqlite:///' + str(BASE_DIR / 'db.sqlite3'))
 
