@@ -11,7 +11,9 @@ CSRF_TRUSTED_ORIGINS = ['https://car2cart.onrender.com']
 # In production, set the database connection via environment variables.
 DATABASES['default'] = env.db('DATABASE_URL', default='sqlite:///' + str(BASE_DIR / 'db.sqlite3'))
 
-# Configure WhiteNoise for static files
+# Static files configuration for production
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_URL = '/static/'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Configure Cloudinary for media uploads
