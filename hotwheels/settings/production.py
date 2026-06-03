@@ -2,14 +2,19 @@ from .base import *
 
 DEBUG = False
 
+# Allowed hosts for production
+ALLOWED_HOSTS = ['car2cart.onrender.com', 'localhost', '127.0.0.1']
+
+# CSRF trusted origins for production
+CSRF_TRUSTED_ORIGINS = ['https://car2cart.onrender.com']
+
 # In production, set the database connection via environment variables.
-DATABASES['default'] = {
-    'ENGINE': env('DATABASE_ENGINE', default='django.db.backends.postgresql'),
-    'NAME': env('DATABASE_NAME', default='hotwheels'),
-    'USER': env('DATABASE_USER', default='postgres'),
-    'PASSWORD': env('DATABASE_PASSWORD', default='postgres'),
-    'HOST': env('DATABASE_HOST', default='localhost'),
-    'PORT': env('DATABASE_PORT', default='5432'),
-}
+DATABASES['default'] = env.db('DATABASE_URL', default='sqlite:///' + str(BASE_DIR / 'db.sqlite3'))
+
+# Configure WhiteNoise for static files
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Configure Cloudinary for media uploads
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 CORS_ALLOWED_ORIGINS = env.list('CORS_ALLOWED_ORIGINS', default=[])
