@@ -14,6 +14,7 @@ DATABASES['default'] = env.db('DATABASE_URL', default='sqlite:///' + str(BASE_DI
 # Static files configuration for production
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATIC_URL = '/static/'
+WHITENOISE_USE_FINDERS = True
 
 # Django 5 uses STORAGES; keep static/media backends explicit for Render.
 STORAGES = {
